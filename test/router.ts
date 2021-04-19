@@ -88,4 +88,18 @@ describe("router", function () {
 
     })
 
+    it("test6", function () {
+        let router = createRouter("/store/:applicationId/:pageId/?productId/*filePath", {
+            applicationId: /[0-9A-Fa-f\-]{36}/,
+            pageId: /[0-9A-Fa-f\-]{36}/,
+            productId: /[0-9A-Fa-f\-]{36}/,
+            filePath: /[0-9A-Za-z\-_\/\.]/,
+        });
+        let m = router.match("/store/7bbfa36c-8115-47ad-8d47-9e52b58e7efd/6a9f7e44-5554-baf3-31f9-9823387342c7/24569c92-69ee-458a-ac7f-d9627498083a");
+        assert.ok(m != null);
+        assert.strictEqual(m.pageId, "6a9f7e44-5554-baf3-31f9-9823387342c7");
+        assert.strictEqual(m.filePath, "content/bootstrap.css");
+
+    })
+
 })

@@ -37,7 +37,8 @@ export class Router {
             }
 
             c.current.value = c.current.isWildcards ? p.else : p.current;
-            p.moveNext();
+            if (!p.moveNext())
+                break;
         }
         while (c.moveNext() != null);
 
