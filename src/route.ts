@@ -5,27 +5,21 @@ import { RouterItems } from "./route-item-collection";
 export class Router {
 
     private _pattern: string;
-    private _items: RouterItems;
+    private rules: { [key: string]: RegExp; };
 
     constructor(pattern: string, rules?: { [key: string]: RegExp }) {
         if (!pattern) throw errors.argumentNull("pattern");
 
-        rules = rules || {};
+        this.rules = rules || {};
 
         this._pattern = pattern;
-        this._items = new RouterItems(pattern);
-        for (let i = 0; i < this._items.all.length; i++) {
-            let name = this._items.all[i].name;
-            if (name != null && rules[name] != null) {
-                this._items.all[i].regexp = rules[name];
-            }
-        }
+
     }
 
     match(path: string): { [key: string]: string } | null {
 
         let p = new PathSegment(path);
-        let c = this._items;
+        let c = this.createRouterItems(this._pattern);
 
         do {
             let testOK = c.current.isWildcards ? c.current.regexp.test(p.else) : c.current.regexp.test(p.current);
@@ -55,14 +49,26 @@ export class Router {
         return r;
     }
 
-    item(name: string) {
-        let r = this._items.all.filter(o => o.name == name)[0];
-        return r;
+    private createRouterItems(pattern: string) {
+        var _items = new RouterItems(pattern);
+        for (let i = 0; i < _items.all.length; i++) {
+            let name = _items.all[i].name;
+            if (name != null && this.rules[name] != null) {
+                _items.all[i].regexp = this.rules[name];
+            }
+        }
+
+        return _items;
     }
 
-    get items() {
-        return this._items;
-    }
+    // item(name: string) {
+    //     let r = this._items.all.filter(o => o.name == name)[0];
+    //     return r;
+    // }
+
+    // get items() {
+    //     return this._items;
+    // }
 
     get pattern() {
         return this._pattern;

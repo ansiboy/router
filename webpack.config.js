@@ -1,4 +1,8 @@
 const webpack = require('webpack');
+let pkg = require("./package.json");
+let license = `
+ ${pkg.name} v${pkg.version}
+`;
 module.exports = {
     entry: __dirname + "/out/index.js", //已多次提及的唯一入口文件
     output: {
@@ -11,5 +15,6 @@ module.exports = {
     devtool: 'source-map',
     externals: [],
     plugins: [
+        new webpack.BannerPlugin(license),
     ],
 }

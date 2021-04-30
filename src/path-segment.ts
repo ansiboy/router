@@ -10,6 +10,9 @@ export class PathSegment {
         if (this.segments.length == 0)
             throw errors.invalidPath(path);
     }
+    reset() {
+        this._index = 0;
+    }
     moveNext(): number | null {
         if (this._index >= this.segments.length - 1)
             return null;
