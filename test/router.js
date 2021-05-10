@@ -133,4 +133,22 @@ describe("router", function () {
         m = routers[1].match("/product/05e983e5-6886-44f5-bfbf-7495e24824a6");
         assert.notStrictEqual(m, null);
     });
+    it("test9", function () {
+        let r = index_1.createRouter("/:name", {
+            name: /[0-9A-Za-z\-_]*/,
+        });
+        let m1 = r.match("/content/bootstrap.css");
+        assert.strictEqual(m1, null);
+        let m2 = r.match("/content");
+        assert.notStrictEqual(m2, null);
+    });
+    it("test10", function () {
+        let r = index_1.createRouter("/:name/*filePath", {
+            name: /^[0-9A-Za-z\-_]*$/,
+            filePath: /[0-9A-Za-z\-_\/\.]/,
+        });
+        let m = r.match("/checkout/preview.js");
+        assert.notStrictEqual(m, null);
+        assert.strictEqual(m.filePath, "preview.js");
+    });
 });
