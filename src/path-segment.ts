@@ -27,7 +27,7 @@ export class PathSegment {
         return this._index;
     }
     get else() {
-        let arr = this.segments.slice(this.index);
+        let arr = this.index >= this.segments.length - 1 ? [] : this.segments.slice(this.index + 1);
         return arr.join("/");
     }
 }

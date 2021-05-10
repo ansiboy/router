@@ -1,3 +1,4 @@
+import { pathConcat } from "maishu-toolkit";
 import { errors } from "./errors";
 import { PathSegment } from "./path-segment";
 import { RouterItems } from "./route-item-collection";
@@ -22,19 +23,35 @@ export class Router {
         let c = this.createRouterItems(this._pattern);
 
         do {
-            let testOK = c.current.isWildcards ? c.current.regexp.test(p.else) : c.current.regexp.test(p.current);
-            if (!testOK) {
-                if (c.current.isOption)
-                    continue;
-                else
-                    return null;
+
+            let wildcardsName = p.else ? pathConcat(p.current, p.else) : p.current;
+            let testOK = c.current.isWildcards ? c.current.regexp.test(wildcardsName) : c.current.regexp.test(p.current);
+            if (testOK) {
+                if (c.current.isWildcards) {
+                    c.current.value = wildcardsName;
+                    break;
+                }
+                else {
+                    c.current.value = p.current;
+                }
+
+            }
+            else if (!testOK && !c.current.isOption) {
+                return null;
+            }
+            else if (!testOK && c.current.isOption) {
+                c.moveNext();
+                continue;
             }
 
-            c.current.value = c.current.isWildcards ? p.else : p.current;
+            if (!c.moveNext())
+                break;
+
             if (!p.moveNext())
                 break;
+
         }
-        while (c.moveNext() != null);
+        while (true);
 
         let r: { [key: string]: string } = {};
         for (let i = 0; i < c.all.length; i++) {
@@ -45,6 +62,9 @@ export class Router {
 
             r[name] = value;
         }
+
+        if (!c.current.isWildcards && p.else != "")
+            return null;
 
         return r;
     }
