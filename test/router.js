@@ -2,6 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 const index_1 = require("../out/index");
 const assert = require("assert");
+const route_item_collection_1 = require("../out/route-item-collection");
 describe("router", function () {
     it("test1", function () {
         let router = index_1.createRouter("/store");
@@ -69,6 +70,11 @@ describe("router", function () {
             filePath: /[0-9A-Za-z\-_\/\.]/,
         });
         let m = router.match("/store/7bbfa36c-8115-47ad-8d47-9e52b58e7efd/6a9f7e44-5554-baf3-31f9-9823387342c7/node_modules/requirejs/requirejs.js");
+        assert.ok(m != null);
+        assert.strictEqual(m.pageId, "6a9f7e44-5554-baf3-31f9-9823387342c7");
+        assert.strictEqual(m.filePath, "node_modules/requirejs/requirejs.js");
+        router = index_1.createRouter("/store/:applicationId#[0-9A-Fa-f\-]{36}/:pageId#[0-9A-Fa-f\-]{36}/?productId#[0-9A-Fa-f\-]{36}/*filePath#[0-9A-Za-z-_\\/.]");
+        m = router.match("/store/7bbfa36c-8115-47ad-8d47-9e52b58e7efd/6a9f7e44-5554-baf3-31f9-9823387342c7/node_modules/requirejs/requirejs.js");
         assert.ok(m != null);
         assert.strictEqual(m.pageId, "6a9f7e44-5554-baf3-31f9-9823387342c7");
         assert.strictEqual(m.filePath, "node_modules/requirejs/requirejs.js");
@@ -142,6 +148,12 @@ describe("router", function () {
         let m2 = r.match("/content");
         assert.notStrictEqual(m2, null);
     });
+    it("parseRouterString9", function () {
+        let items = route_item_collection_1.parseRouterString("/:name#[0-9A-Za-z\-_]*");
+        assert.strictEqual(items.length, 1);
+        assert.strictEqual(items[0].name, "name");
+        assert.strictEqual(items[0].regexp.toString(), "/[0-9A-Za-z\-_]*/");
+    });
     it("test10", function () {
         let r = index_1.createRouter("/:name/*filePath", {
             name: /^[0-9A-Za-z\-_]*$/,
@@ -150,5 +162,16 @@ describe("router", function () {
         let m = r.match("/checkout/preview.js");
         assert.notStrictEqual(m, null);
         assert.strictEqual(m.filePath, "preview.js");
+    });
+    it("parseRouterString", function () {
+        let items = route_item_collection_1.parseRouterString("/:name");
+        assert.strictEqual(items.length, 1);
+        assert.strictEqual(items[0].name, "name");
+    });
+    it("parseRouterString1", function () {
+        let items = route_item_collection_1.parseRouterString("/:name#^[0-9A-Za-z\-_]*$");
+        assert.strictEqual(items.length, 1);
+        assert.strictEqual(items[0].name, "name");
+        assert.strictEqual(items[0].regexp.toString(), "/^[0-9A-Za-z\-_]*$/");
     });
 });

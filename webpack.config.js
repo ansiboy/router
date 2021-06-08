@@ -17,4 +17,5 @@ module.exports = {
     plugins: [
         new webpack.BannerPlugin(license),
     ],
+    externals: ["maishu-toolkit"]
 }

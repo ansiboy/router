@@ -1,5 +1,6 @@
 import { createRouter, RouterItem } from "../out/index";
 import * as assert from "assert";
+import { parseRouterString } from "../out/route-item-collection";
 
 describe("router", function () {
     it("test1", function () {
@@ -85,6 +86,11 @@ describe("router", function () {
         assert.strictEqual(m.pageId, "6a9f7e44-5554-baf3-31f9-9823387342c7");
         assert.strictEqual(m.filePath, "node_modules/requirejs/requirejs.js");
 
+        router = createRouter("/store/:applicationId#[0-9A-Fa-f\-]{36}/:pageId#[0-9A-Fa-f\-]{36}/?productId#[0-9A-Fa-f\-]{36}/*filePath#[0-9A-Za-z-_\\/.]");
+        m = router.match("/store/7bbfa36c-8115-47ad-8d47-9e52b58e7efd/6a9f7e44-5554-baf3-31f9-9823387342c7/node_modules/requirejs/requirejs.js");
+        assert.ok(m != null);
+        assert.strictEqual(m.pageId, "6a9f7e44-5554-baf3-31f9-9823387342c7");
+        assert.strictEqual(m.filePath, "node_modules/requirejs/requirejs.js");
     })
 
     it("test6", function () {
@@ -168,6 +174,15 @@ describe("router", function () {
 
     })
 
+    it("parseRouterString9", function () {
+
+
+        let items = parseRouterString("/:name#[0-9A-Za-z\-_]*");
+        assert.strictEqual(items.length, 1);
+        assert.strictEqual(items[0].name, "name");
+        assert.strictEqual(items[0].regexp.toString(), "/[0-9A-Za-z\-_]*/")
+    })
+
     it("test10", function () {
 
         let r = createRouter("/:name/*filePath", {
@@ -178,6 +193,19 @@ describe("router", function () {
         let m = r.match("/checkout/preview.js");
         assert.notStrictEqual(m, null);
         assert.strictEqual(m.filePath, "preview.js");
+    })
+
+    it("parseRouterString", function () {
+        let items = parseRouterString("/:name");
+        assert.strictEqual(items.length, 1);
+        assert.strictEqual(items[0].name, "name");
+    })
+
+    it("parseRouterString1", function () {
+        let items = parseRouterString("/:name#^[0-9A-Za-z\-_]*$");
+        assert.strictEqual(items.length, 1);
+        assert.strictEqual(items[0].name, "name");
+        assert.strictEqual(items[0].regexp.toString(), "/^[0-9A-Za-z\-_]*$/")
     })
 
 
