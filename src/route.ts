@@ -47,8 +47,10 @@ export class Router {
             if (!c.moveNext())
                 break;
 
-            if (!p.moveNext())
+            if (!p.moveNext()) {
+
                 break;
+            }
 
         }
         while (true);
@@ -65,6 +67,11 @@ export class Router {
 
         if (!c.current.isWildcards && p.else != "")
             return null;
+
+        for (let i = 0; i < c.all.length; i++) {
+            if (c.all[i].value == null && !c.all[i].isOption)
+                return null;
+        }
 
         return r;
     }

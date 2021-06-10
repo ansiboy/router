@@ -174,4 +174,9 @@ describe("router", function () {
         assert.strictEqual(items[0].name, "name");
         assert.strictEqual(items[0].regexp.toString(), "/^[0-9A-Za-z\-_]*$/");
     });
+    it("parseRouterString2", function () {
+        let r = index_1.createRouter("/:store/:theme/:page#^[0-9A-Za-z\-\_]+$");
+        let m = r.match("/gemwon-pc/website-config.js");
+        assert.ok(m == null);
+    });
 });
