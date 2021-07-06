@@ -1,4 +1,3 @@
-import { errors } from "./errors";
 import { RouterItem } from "./route-item";
 
 let signals = {
@@ -11,15 +10,6 @@ export class RouterItems {
     private _index = 0;
 
     constructor(routerString: string) {
-        // let arr = routerString.split("/").filter(o => o);
-        // for (let i = 0; i < arr.length; i++) {
-        //     let item = new RouterItem(arr[i]);
-        //     let isExists = this._items.filter(o => o.name == item.name).length > 0;
-        //     if (isExists)
-        //         throw errors.routeItemExists(arr[i]);
-
-        //     this._items.push(item);
-        // }
         this._items = parseRouterString(routerString);
     }
 

@@ -1,6 +1,6 @@
 {
     "name": "maishu-router",
-    "version": "1.4.2",
+    "version": "1.4.8",
     "author": "shu mai",
     "dependencies": {
         "maishu-toolkit": "^1.6.6"

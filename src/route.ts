@@ -69,7 +69,7 @@ export class Router {
             return null;
 
         for (let i = 0; i < c.all.length; i++) {
-            if (c.all[i].value == null && !c.all[i].isOption)
+            if (c.all[i].value == null && !(c.all[i].isOption || c.all[i].isWildcards))
                 return null;
         }
 
