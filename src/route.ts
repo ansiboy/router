@@ -40,7 +40,10 @@ export class Router {
                 return null;
             }
             else if (!testOK && c.current.isOption) {
-                c.moveNext();
+                let r = c.moveNext();
+                if (!r)
+                    break;
+
                 continue;
             }
 

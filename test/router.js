@@ -179,4 +179,9 @@ describe("router", function () {
         let m = r.match("/gemwon-pc/website-config.js");
         assert.ok(m == null);
     });
+    it("parseRouterString3", function () {
+        let r = index_1.createRouter("/product-list/?categoryId#^[0-9A-Za-z\-\_]+$");
+        let m = r.match("/product-list/website-config.js");
+        assert.ok(m == null);
+    });
 });

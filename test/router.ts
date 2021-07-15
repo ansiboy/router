@@ -214,5 +214,11 @@ describe("router", function () {
         assert.ok(m == null);
     })
 
+    it("parseRouterString3", function () {
+        let r = createRouter("/product-list/?categoryId#^[0-9A-Za-z\-\_]+$");
+        let m = r.match("/product-list/xxxx.js");
+        assert.ok(m == null);
+    })
+
 
 })
